@@ -1,5 +1,5 @@
 [package]
-name = "sleitnick/knit"
+name = "dig1t/knit"
 description = "Knit is a lightweight game framework"
 version = "1.7.0"
 license = "MIT"

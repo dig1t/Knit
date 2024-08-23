@@ -4,7 +4,7 @@
 	.Outbound ServerMiddleware?
 	@within KnitServer
 ]=]
-type Middleware = {
+export type Middleware = {
 	Inbound: ServerMiddleware?,
 	Outbound: ServerMiddleware?,
 }
@@ -15,14 +15,14 @@ type Middleware = {
 
 	For more info, see [ServerComm](https://sleitnick.github.io/RbxUtil/api/ServerComm/) documentation.
 ]=]
-type ServerMiddlewareFn = (player: Player, args: { any }) -> (boolean, ...any)
+export type ServerMiddlewareFn = (player: Player, args: { any }) -> (boolean, ...any)
 
 --[=[
 	@type ServerMiddleware {ServerMiddlewareFn}
 	@within KnitServer
 	An array of server middleware functions.
 ]=]
-type ServerMiddleware = { ServerMiddlewareFn }
+export type ServerMiddleware = { ServerMiddlewareFn }
 
 --[=[
 	@interface ServiceDef
@@ -37,7 +37,7 @@ type ServerMiddleware = { ServerMiddlewareFn }
 	middleware (if any). This allows fine-tuning each service's middleware.
 	These can also be left out or `nil` to not include middleware.
 ]=]
-type ServiceDef = {
+export type ServiceDef = {
 	Name: string,
 	Client: { [any]: any }?,
 	Middleware: Middleware?,
@@ -52,7 +52,7 @@ type ServiceDef = {
 	.[any] any
 	@within KnitServer
 ]=]
-type Service = {
+export type Service = {
 	Name: string,
 	Client: ServiceClient,
 	KnitComm: any,
@@ -65,7 +65,7 @@ type Service = {
 	.[any] any
 	@within KnitServer
 ]=]
-type ServiceClient = {
+export type ServiceClient = {
 	Server: Service,
 	[any]: any,
 }
@@ -78,7 +78,7 @@ type ServiceClient = {
 	- Middleware will apply to all services _except_ ones that define
 	their own middleware.
 ]=]
-type KnitOptions = {
+export type KnitOptions = {
 	Middleware: Middleware?,
 }
 

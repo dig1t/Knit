@@ -4,7 +4,7 @@
 	.Outbound ClientMiddleware?
 	@within KnitClient
 ]=]
-type Middleware = {
+export type Middleware = {
 	Inbound: ClientMiddleware?,
 	Outbound: ClientMiddleware?,
 }
@@ -15,20 +15,20 @@ type Middleware = {
 
 	For more info, see [ClientComm](https://sleitnick.github.io/RbxUtil/api/ClientComm/) documentation.
 ]=]
-type ClientMiddlewareFn = (args: { any }) -> (boolean, ...any)
+export type ClientMiddlewareFn = (args: { any }) -> (boolean, ...any)
 
 --[=[
 	@type ClientMiddleware {ClientMiddlewareFn}
 	@within KnitClient
 	An array of client middleware functions.
 ]=]
-type ClientMiddleware = { ClientMiddlewareFn }
+export type ClientMiddleware = { ClientMiddlewareFn }
 
 --[=[
 	@type PerServiceMiddleware {[string]: Middleware}
 	@within KnitClient
 ]=]
-type PerServiceMiddleware = { [string]: Middleware }
+export type PerServiceMiddleware = { [string]: Middleware }
 
 --[=[
 	@interface ControllerDef
@@ -37,7 +37,7 @@ type PerServiceMiddleware = { [string]: Middleware }
 	@within KnitClient
 	Used to define a controller when creating it in `CreateController`.
 ]=]
-type ControllerDef = {
+export type ControllerDef = {
 	Name: string,
 	[any]: any,
 }
@@ -48,7 +48,7 @@ type ControllerDef = {
 	.[any] any
 	@within KnitClient
 ]=]
-type Controller = {
+export type Controller = {
 	Name: string,
 	[any]: any,
 }
@@ -58,7 +58,7 @@ type Controller = {
 	.[any] any
 	@within KnitClient
 ]=]
-type Service = {
+export type Service = {
 	[any]: any,
 }
 
@@ -73,7 +73,7 @@ type Service = {
 	- Each service will go through the defined middleware, unless the service
 	has middleware defined in `PerServiceMiddleware`.
 ]=]
-type KnitOptions = {
+export type KnitOptions = {
 	ServicePromises: boolean,
 	Middleware: Middleware?,
 	PerServiceMiddleware: PerServiceMiddleware?,
