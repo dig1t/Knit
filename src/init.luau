@@ -1,31 +1,31 @@
 local RunService = game:GetService("RunService")
 
-local KnitServer = require(script.KnitServer)
-local KnitClient = require(script.KnitClient)
+local Types = require(script.Types)
 
-export type Middleware = KnitServer.Middleware
+export type Middleware = Types.Middleware
 
-export type ServerMiddlewareFn = KnitServer.ServerMiddlewareFn
-export type ServerMiddleware = KnitServer.ServerMiddleware
-export type ServiceDef = KnitServer.ServiceDef
-export type Service = KnitServer.Service
-export type ServiceClient = KnitServer.ServiceClient
-export type KnitServerOptions = KnitServer.KnitOptions
+export type ServerMiddlewareFn = Types.ServerMiddlewareFn
+export type ServerMiddleware = Types.ServerMiddleware
+export type ServiceDef = Types.ServiceDef
+export type Service = Types.Service
+export type ServiceClient = Types.ServiceClient
+export type KnitServerOptions = Types.KnitServerOptions
 
-export type ClientMiddlewareFn = KnitClient.ClientMiddlewareFn
-export type ClientMiddleware = KnitClient.ClientMiddleware
-export type PerServiceMiddleware = KnitClient.PerServiceMiddleware
-export type ControllerDef = KnitClient.ControllerDef
-export type Controller = KnitClient.Controller
-export type KnitClientOptions = KnitClient.KnitOptions
+export type ClientMiddlewareFn = Types.ClientMiddlewareFn
+export type ClientMiddleware = Types.ClientMiddleware
+export type PerServiceMiddleware = Types.PerServiceMiddleware
+export type ControllerDef = Types.ControllerDef
+export type Controller = Types.Controller
+export type ClientService = Types.ClientService
+export type KnitClientOptions = Types.KnitClientOptions
 
 if RunService:IsServer() then
-	return KnitServer
+	return require(script.KnitServer)
 else
-	local _KnitServer = script:FindFirstChild("KnitServer")
-	if _KnitServer and RunService:IsRunning() then
-		_KnitServer:Destroy()
+	local KnitServer = script:FindFirstChild("KnitServer")
+	if KnitServer and RunService:IsRunning() then
+		KnitServer:Destroy()
 	end
 
-	return KnitClient
+	return require(script.KnitClient)
 end

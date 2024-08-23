@@ -1,88 +1,14 @@
---[=[
-	@interface Middleware
-	.Inbound ServerMiddleware?
-	.Outbound ServerMiddleware?
-	@within KnitServer
-]=]
-export type Middleware = {
-	Inbound: ServerMiddleware?,
-	Outbound: ServerMiddleware?,
-}
+local Types = require(script.Parent.Types)
 
---[=[
-	@type ServerMiddlewareFn (player: Player, args: {any}) -> (shouldContinue: boolean, ...: any)
-	@within KnitServer
+export type Middleware = Types.Middleware
+export type ServerMiddlewareFn = Types.ServerMiddlewareFn
+export type ServerMiddleware = Types.ServerMiddleware
+export type ServiceDef = Types.ServiceDef
+export type Service = Types.Service
+export type ServiceClient = Types.ServiceClient
+export type KnitServerOptions = Types.KnitServerOptions
 
-	For more info, see [ServerComm](https://sleitnick.github.io/RbxUtil/api/ServerComm/) documentation.
-]=]
-export type ServerMiddlewareFn = (player: Player, args: { any }) -> (boolean, ...any)
-
---[=[
-	@type ServerMiddleware {ServerMiddlewareFn}
-	@within KnitServer
-	An array of server middleware functions.
-]=]
-export type ServerMiddleware = { ServerMiddlewareFn }
-
---[=[
-	@interface ServiceDef
-	.Name string
-	.Client table?
-	.Middleware Middleware?
-	.[any] any
-	@within KnitServer
-	Used to define a service when creating it in `CreateService`.
-
-	The middleware tables provided will be used instead of the Knit-level
-	middleware (if any). This allows fine-tuning each service's middleware.
-	These can also be left out or `nil` to not include middleware.
-]=]
-export type ServiceDef = {
-	Name: string,
-	Client: { [any]: any }?,
-	Middleware: Middleware?,
-	[any]: any,
-}
-
---[=[
-	@interface Service
-	.Name string
-	.Client ServiceClient
-	.KnitComm Comm
-	.[any] any
-	@within KnitServer
-]=]
-export type Service = {
-	Name: string,
-	Client: ServiceClient,
-	KnitComm: any,
-	[any]: any,
-}
-
---[=[
-	@interface ServiceClient
-	.Server Service
-	.[any] any
-	@within KnitServer
-]=]
-export type ServiceClient = {
-	Server: Service,
-	[any]: any,
-}
-
---[=[
-	@interface KnitOptions
-	.Middleware Middleware?
-	@within KnitServer
-
-	- Middleware will apply to all services _except_ ones that define
-	their own middleware.
-]=]
-export type KnitOptions = {
-	Middleware: Middleware?,
-}
-
-local defaultOptions: KnitOptions = {
+local defaultOptions: KnitServerOptions = {
 	Middleware = nil,
 }
 
@@ -137,8 +63,8 @@ end
 local knitRepServiceFolder = Instance.new("Folder")
 knitRepServiceFolder.Name = "Services"
 
-local Promise = require(KnitServer.Util.Promise)
 local Comm = require(KnitServer.Util.Comm)
+local Promise = require(KnitServer.Util.Promise)
 local ServerComm = Comm.ServerComm
 
 local services: { [string]: Service } = {}
@@ -351,7 +277,7 @@ end
 	@return Promise
 	Starts Knit. Should only be called once.
 
-	Optionally, `KnitOptions` can be passed in order to set
+	Optionally, `KnitServerOptions` can be passed in order to set
 	Knit's custom configurations.
 
 	:::caution
@@ -381,7 +307,7 @@ end
 	end):catch(warn)
 	```
 ]=]
-function KnitServer.Start(options: KnitOptions?)
+function KnitServer.Start(options: Types.KnitClientOptions?)
 	if started then
 		return Promise.reject("Knit already started")
 	end
@@ -393,7 +319,7 @@ function KnitServer.Start(options: KnitOptions?)
 	if options == nil then
 		selectedOptions = defaultOptions
 	else
-		assert(typeof(options) == "table", `KnitOptions should be a table or nil; got {typeof(options)}`)
+		assert(typeof(options) == "table", `KnitServerOptions should be a table or nil; got {typeof(options)}`)
 		selectedOptions = options
 		for k, v in defaultOptions do
 			if selectedOptions[k] == nil then
@@ -484,5 +410,13 @@ function KnitServer.OnStart()
 		return Promise.fromEvent(onStartedComplete.Event)
 	end
 end
+
+-- For LSP purposes
+KnitServer.Player = (nil :: any) :: Player
+KnitServer.CreateController = (nil :: any) :: ({ [any]: any }) -> { [any]: any }
+KnitServer.GetController = (nil :: any) :: (string) -> { [any]: any }
+KnitServer.GetControllers = (nil :: any) :: () -> { [any]: any }
+KnitServer.AddControllers = (nil :: any) :: (Instance) -> { [any]: any }
+KnitServer.AddControllersDeep = (nil :: any) :: (Instance) -> { [any]: any }
 
 return KnitServer
